@@ -1,9 +1,9 @@
 <?php
 
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CODE_DAO.php');
 
-use QW\DAO\QW_DAO;
+use CODE\DAO\CODE_DAO;
 use Tsugi\Core\LTIX;
 
 // Retrieve the launch data if present
@@ -11,7 +11,7 @@ $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CODE_DAO = new CODE_DAO($PDOX, $p);
 
 // Start of the output
 $OUTPUT->header();
@@ -28,13 +28,13 @@ include("tool-header.html");
 
 $OUTPUT->bodyStart();
 
-$mainId = $_SESSION["qw_id"];
+$mainId = $_SESSION["code_id"];
 
-$questions = $QW_DAO->getQuestions($mainId);
+$questions = $CODE_DAO->getQuestions($mainId);
 
 $totalQuestions = count($questions);
 
-$StudentList = $QW_DAO->getUsersWithAnswers($mainId);
+$StudentList = $CODE_DAO->getUsersWithAnswers($mainId);
 
 ?>
 <div class="container-fluid">
@@ -66,8 +66,8 @@ $StudentList = $QW_DAO->getUsersWithAnswers($mainId);
                         <?php
                         foreach ( $StudentList as $student ) {
                             $userId = $student['user_id'];
-                            $displayName = $QW_DAO->findDisplayName($userId);
-                            $mostRecentDate = new DateTime($QW_DAO->getMostRecentAnswerDate($userId, $mainId));
+                            $displayName = $CODE_DAO->findDisplayName($userId);
+                            $mostRecentDate = new DateTime($CODE_DAO->getMostRecentAnswerDate($userId, $mainId));
                             $formattedDate = $mostRecentDate->format("m-d-y")." at ".$mostRecentDate->format("h:i A");
 
                             echo ('<tr>
@@ -94,7 +94,7 @@ $StudentList = $QW_DAO->getUsersWithAnswers($mainId);
                                     echo ('</tr>');
                                 }
 
-                                $answer = $QW_DAO->getStudentAnswerForQuestion($question_id, $userId);
+                                $answer = $CODE_DAO->getStudentAnswerForQuestion($question_id, $userId);
 
                                 $answerText = "";
                                 if ($answer) {

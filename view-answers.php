@@ -1,9 +1,9 @@
 <?php
 
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CODE_DAO.php');
 
-use QW\DAO\QW_DAO;
+use CODE\DAO\CODE_DAO;
 use Tsugi\Core\LTIX;
 
 // Retrieve the launch data if present
@@ -11,7 +11,7 @@ $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CODE_DAO = new CODE_DAO($PDOX, $p);
 
 if (!isset($_GET["question_id"])) {
     header( 'Location: '.addSession('instructor-home.php') ) ;
@@ -19,9 +19,9 @@ if (!isset($_GET["question_id"])) {
 
 $question_id = $_GET["question_id"];
 
-$question = $QW_DAO->getQuestionById($question_id);
+$question = $CODE_DAO->getQuestionById($question_id);
 
-$answers = $QW_DAO->getAllAnswersToQuestion($question_id);
+$answers = $CODE_DAO->getAllAnswersToQuestion($question_id);
 
 $totalAnswers = count($answers);
 
@@ -50,7 +50,7 @@ $OUTPUT->bodyStart();
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
             <h3>Answers (<?php echo($totalAnswers); ?>)</h3>
-            <div class="list-group fadeInFast" id="qwContentContainer">
+            <div class="list-group fadeInFast" id="codeContentContainer">
                 <div class="list-group-item">
                     <h4><?php echo($question["question_txt"]); ?></h4>
                 </div>
@@ -61,7 +61,7 @@ $OUTPUT->bodyStart();
                         <div class="row">
                             <div class="col-sm-2">
                                 <p>
-                                    <strong><?php echo($QW_DAO->findDisplayName($answer["user_id"])); ?></strong>
+                                    <strong><?php echo($CODE_DAO->findDisplayName($answer["user_id"])); ?></strong>
                                     <?php
                                     $formattedAnswerDate = '';
                                     if ($answer) {

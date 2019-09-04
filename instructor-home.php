@@ -1,17 +1,17 @@
 <?php
 
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CODE_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CODE\DAO\CODE_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CODE_DAO = new CODE_DAO($PDOX, $p);
 
 // Start of the output
 $OUTPUT->header();
@@ -20,13 +20,13 @@ include("tool-header.html");
 
 $OUTPUT->bodyStart();
 
-$toolTitle = $QW_DAO->getMainTitle($_SESSION["qw_id"]);
+$toolTitle = $CODE_DAO->getMainTitle($_SESSION["code_id"]);
 
 if (!$toolTitle) {
     $toolTitle = "Quick Write";
 }
 
-$questions = $QW_DAO->getQuestions($_SESSION["qw_id"]);
+$questions = $CODE_DAO->getQuestions($_SESSION["code_id"]);
 
 $totalQuestions = count($questions);
 ?>
@@ -49,21 +49,21 @@ $totalQuestions = count($questions);
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-3 col-sm-offset-1" id="qwInfo">
+            <div class="col-sm-3 col-sm-offset-1" id="codeInfo">
                 <input type="hidden" id="sess" value="<?php echo($_GET["PHPSESSID"]) ?>">
                 <h1 contenteditable="true" id="toolTitle"><?php echo($toolTitle); ?></h1>
                 <p>Use the button below to add a question to the list. Once a question has been created, you can make changes to the text or delete it and its answers.</p>
                 <a href="#addOrEditQuestion" data-toggle="modal" class="btn btn-success small-shadow"><span class="fa fa-plus"></span> Add Question</a>
             </div>
             <div class="col-sm-7">
-                <div class="list-group fadeInFast" id="qwContentContainer">
+                <div class="list-group fadeInFast" id="codeContentContainer">
                     <div class="list-group-item">
                         <a href="view-all-results.php" class="pull-right">View All Results <span id="viewAllChevron" class="fa fa-chevron-right"></span></a>
                         <h3>Questions (<?php echo($totalQuestions); ?>)</h3>
                     </div>
                     <?php
                     foreach ($questions as $question) {
-                        $totalAnswers = $QW_DAO->countAnswersForQuestion($question["question_id"]);
+                        $totalAnswers = $CODE_DAO->countAnswersForQuestion($question["question_id"]);
                         echo('
                         <div class="list-group-item">
                             <h4 id="questionText'.$question["question_id"].'">'.$question["question_txt"].'</h4>

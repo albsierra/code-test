@@ -1,29 +1,29 @@
 <?php
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CODE_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CODE\DAO\CODE_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CODE_DAO = new CODE_DAO($PDOX, $p);
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTime = $currentTime->format("Y-m-d H:i:s");
 
 if ( $USER->instructor ) {
 
-    $_SESSION["qw_id"] = $QW_DAO->getOrCreateMain($USER->id, $CONTEXT->id, $LINK->id, $currentTime);
+    $_SESSION["code_id"] = $CODE_DAO->getOrCreateMain($USER->id, $CONTEXT->id, $LINK->id, $currentTime);
 
-    $hasQuestions = $QW_DAO->getQuestions($_SESSION["qw_id"]);
+    $hasQuestions = $CODE_DAO->getQuestions($_SESSION["code_id"]);
 
     if (!$hasQuestions) {
         // No questions check if user wants to see the splash on new instances of tool
-        $skipSplash = $QW_DAO->skipSplash($USER->id);
+        $skipSplash = $CODE_DAO->skipSplash($USER->id);
 
         if ($skipSplash) {
             header( 'Location: '.addSession('instructor-home.php') ) ;
@@ -36,12 +36,12 @@ if ( $USER->instructor ) {
     }
 } else { // student
 
-    $mainId = $QW_DAO->getMainID($CONTEXT->id, $LINK->id);
+    $mainId = $CODE_DAO->getMainID($CONTEXT->id, $LINK->id);
 
     if (!$mainId) {
         echo ("<h1>Instructor needs to do stuff");
     } else {
-        $_SESSION["qw_id"] = $mainId;
+        $_SESSION["code_id"] = $mainId;
 
         header( 'Location: '.addSession('student-home.php') ) ;
     }

@@ -1,15 +1,15 @@
 <?php
 require_once "../../config.php";
-require_once('../dao/QW_DAO.php');
+require_once('../dao/CODE_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CODE\DAO\CODE_DAO;
 
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CODE_DAO = new CODE_DAO($PDOX, $p);
 
 if ($USER->instructor) {
 
@@ -21,10 +21,10 @@ if ($USER->instructor) {
 
 	if ($questionId > -1) {
 	    // Existing question
-	    $QW_DAO->updateQuestion($questionId, $questionText, $currentTime);
+	    $CODE_DAO->updateQuestion($questionId, $questionText, $currentTime);
     } else {
 	    // New question
-        $QW_DAO->createQuestion($_SESSION["qw_id"], $questionText, $currentTime);
+        $CODE_DAO->createQuestion($_SESSION["code_id"], $questionText, $currentTime);
     }
 
     header( 'Location: '.addSession('../instructor-home.php') ) ;

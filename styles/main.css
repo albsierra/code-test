@@ -8,14 +8,14 @@ body {
         background-size: 50% auto;
     }
 }
-#qwInfo {
+#codeInfo {
     line-height: 2.5em;
     margin-bottom: 1em;
 }
-#qwInfo p {
+#codeInfo p {
     line-height: 1.5em;
 }
-#qwContentContainer {
+#codeContentContainer {
     -webkit-box-shadow: 0 8px 17px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
     box-shadow: 0 8px 17px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
 }

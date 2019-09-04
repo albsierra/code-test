@@ -1,23 +1,23 @@
 <?php
 require_once "../../config.php";
 require_once "../util/PHPExcel.php";
-require_once "../dao/QW_DAO.php";
+require_once "../dao/CODE_DAO.php";
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CODE\DAO\CODE_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CODE_DAO = new CODE_DAO($PDOX, $p);
 
 if ( $USER->instructor ) {
 
-    $qw_id = $_SESSION["qw_id"];
+    $code_id = $_SESSION["code_id"];
 
-    $questions = $QW_DAO->getQuestions($qw_id);
+    $questions = $CODE_DAO->getQuestions($code_id);
 
     $rowCounter = 1;
 
@@ -46,7 +46,7 @@ if ( $USER->instructor ) {
         $exportFile->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
     }
 
-    $StudentList = $QW_DAO->getUsersWithAnswers($qw_id);
+    $StudentList = $CODE_DAO->getUsersWithAnswers($code_id);
 
     $columnIterator = $exportFile->getActiveSheet()->getColumnIterator();
     $columnIterator->next();
@@ -56,13 +56,13 @@ if ( $USER->instructor ) {
 
         $UserID = $student["user_id"];
 
-        $Email = $QW_DAO->findEmail($UserID);
+        $Email = $CODE_DAO->findEmail($UserID);
         $UserName = explode("@",$Email);
 
-        $Modified1 = $QW_DAO->getMostRecentAnswerDate($UserID, $qw_id);
+        $Modified1 = $CODE_DAO->getMostRecentAnswerDate($UserID, $code_id);
         $Modified  =  new DateTime($Modified1);
 
-        $displayName = $QW_DAO->findDisplayName($UserID);
+        $displayName = $CODE_DAO->findDisplayName($UserID);
         $displayName = trim($displayName);
 
         $lastName = (strpos($displayName, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $displayName);
@@ -78,7 +78,7 @@ if ( $USER->instructor ) {
             $QID = $question["question_id"];
             $A="";
 
-            $answer = $QW_DAO->getStudentAnswerForQuestion($QID, $UserID);
+            $answer = $CODE_DAO->getStudentAnswerForQuestion($QID, $UserID);
             if ($answer) {
                 $A = $answer["answer_txt"];
                 $A = str_replace("&#39;", "'", $A);

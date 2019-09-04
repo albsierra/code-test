@@ -7,52 +7,52 @@ $DATABASE_UNINSTALL = array(
 
 // The SQL to create the tables if they don't exist
 $DATABASE_INSTALL = array(
-    array( "{$CFG->dbprefix}qw_splash",
-        "create table {$CFG->dbprefix}qw_splash (
+    array( "{$CFG->dbprefix}code_splash",
+        "create table {$CFG->dbprefix}code_splash (
     user_id       INTEGER NOT NULL DEFAULT 0,
     skip_splash   BOOL NOT NULL DEFAULT 0,
     PRIMARY KEY(user_id)
 	
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
-    array( "{$CFG->dbprefix}qw_main",
-        "create table {$CFG->dbprefix}qw_main (
-    qw_id       INTEGER NOT NULL AUTO_INCREMENT,
+    array( "{$CFG->dbprefix}code_main",
+        "create table {$CFG->dbprefix}code_main (
+    code_id       INTEGER NOT NULL AUTO_INCREMENT,
     user_id     INTEGER NOT NULL,
     context_id  INTEGER NOT NULL,
 	link_id     INTEGER NOT NULL,
 	title       VARCHAR(255) NULL,
     modified    datetime NULL,
     
-    PRIMARY KEY(qw_id)
+    PRIMARY KEY(code_id)
 	
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),    
-    array( "{$CFG->dbprefix}qw_question",
-        "create table {$CFG->dbprefix}qw_question (
+    array( "{$CFG->dbprefix}code_question",
+        "create table {$CFG->dbprefix}code_question (
     question_id   INTEGER NOT NULL AUTO_INCREMENT,
-    qw_id         INTEGER NOT NULL,
+    code_id         INTEGER NOT NULL,
     question_num  INTEGER NULL,
     question_txt  TEXT NULL,   
     modified      datetime NULL,
     
-    CONSTRAINT `{$CFG->dbprefix}qw_ibfk_1`
-        FOREIGN KEY (`qw_id`)
-        REFERENCES `{$CFG->dbprefix}qw_main` (`qw_id`)
+    CONSTRAINT `{$CFG->dbprefix}code_ibfk_1`
+        FOREIGN KEY (`code_id`)
+        REFERENCES `{$CFG->dbprefix}code_main` (`code_id`)
         ON DELETE CASCADE,
 
     PRIMARY KEY(question_id)
 	
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
-    array( "{$CFG->dbprefix}qw_answer",
-        "create table {$CFG->dbprefix}qw_answer (
+    array( "{$CFG->dbprefix}code_answer",
+        "create table {$CFG->dbprefix}code_answer (
     answer_id    INTEGER NOT NULL AUTO_INCREMENT,
     user_id      INTEGER NOT NULL,
     question_id  INTEGER NOT NULL,
 	answer_txt   TEXT NULL,
     modified     datetime NULL,
     
-    CONSTRAINT `{$CFG->dbprefix}qw_ibfk_2`
+    CONSTRAINT `{$CFG->dbprefix}code_ibfk_2`
         FOREIGN KEY (`question_id`)
-        REFERENCES `{$CFG->dbprefix}qw_question` (`question_id`)
+        REFERENCES `{$CFG->dbprefix}code_question` (`question_id`)
         ON DELETE CASCADE,
     
     PRIMARY KEY(answer_id)
