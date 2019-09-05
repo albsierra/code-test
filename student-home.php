@@ -25,7 +25,7 @@ $SetID = $_SESSION["code_id"];
 $toolTitle = $CODE_DAO->getMainTitle($_SESSION["code_id"]);
 
 if (!$toolTitle) {
-    $toolTitle = "Quick Write";
+    $toolTitle = "Code Test";
 }
 
 $questions = $CODE_DAO->getQuestions($SetID);
@@ -66,6 +66,7 @@ $moreToSubmit = false;
 
                             echo('<div class="list-group-item">
                                 <h4>'.$question["question_txt"].'</h4>
+                                <h5><b>Language:</b> '.$CODE_DAO->getLanguageNameFromId($question["question_language"]).'</h5>
                                 <p>');
 
                             if (!$answer || $answerText == "") {

@@ -23,7 +23,7 @@ $OUTPUT->bodyStart();
 $toolTitle = $CODE_DAO->getMainTitle($_SESSION["code_id"]);
 
 if (!$toolTitle) {
-    $toolTitle = "Quick Write";
+    $toolTitle = "Code test";
 }
 
 $questions = $CODE_DAO->getQuestions($_SESSION["code_id"]);
@@ -67,10 +67,19 @@ $totalQuestions = count($questions);
                         echo('
                         <div class="list-group-item">
                             <h4 id="questionText'.$question["question_id"].'">'.$question["question_txt"].'</h4>
+                            <h5 id="questionLanguage'.$question["question_id"].'"><b>Language:</b> '.
+                                $CODE_DAO->getLanguageNameFromId($question["question_language"]) 
+                            . '</h5>
                             <form id="questionTextForm'.$question["question_id"].'" action="actions/AddOrEditQuestion.php" method="post" style="display:none;">
                                 <p>
                                     <input type="hidden" name="questionId" value="'.$question["question_id"].'">
+                                    <select name="questionLanguage" id="questionLanguage">
+                                        <option value="1" selected="' . ($question["question_language"] == 1 ? "selected" : "") . '">PHP</option>
+                                        <option value="2" selected="' . ($question["question_language"] == 2 ? "selected" : "") . '">Java</option>
+                                    </select>
                                     <textarea class="form-control" name="questionText" rows="4" required>'.$question["question_txt"].'</textarea>
+                                    <input type="text" name="questionInput" id="questionInput" value="'.$question["question_input"].'">
+                                    <textarea class="form-control" name="questionOutput" id="questionOutput" rows="4" required>'.$question["question_output"].'</textarea>
                                 </p>
                                 <div class="text-right">
                                     <input type="submit" class="btn btn-success" value="Save" form="questionTextForm'.$question["question_id"].'">
@@ -107,8 +116,22 @@ $totalQuestions = count($questions);
                 <form method="post" id="addQuestionForm" action="actions/AddOrEditQuestion.php">
                     <div class="modal-body">
                         <input type="hidden" name="questionId" id="questionId" value="-1">
+
+                        <label for="questionLanguage">Question Language</label>
+                                    <select name="questionLanguage" id="questionLanguage">
+                                        <option value="1" >PHP</option>
+                                        <option value="2" >Java</option>
+                                    </select>
+                        <br />
+
                         <label for="questionText">Question Text</label>
-                        <textarea class="form-control" name="questionText" id="questionText" rows="4" autofocus required></textarea>
+                        <textarea class="form-control" name="questionText" id="questionText" rows="4" required></textarea>
+
+                        <label for="questionInput">Question Input</label>
+                        <input type="text" class="form-control" name="questionInput" id="questionInput" value="" required>
+
+                        <label for="questionOutput">Question Output</label>
+                        <textarea class="form-control" name="questionOutput" id="questionOutput" rows="4" required></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>

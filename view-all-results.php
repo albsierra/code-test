@@ -87,6 +87,8 @@ $StudentList = $CODE_DAO->getUsersWithAnswers($mainId);
 
                                 echo ('<td class="question-col">
                                         '.$question["question_txt"].'
+                                        <br />
+                                        <b>Language:</b>'.$CODE_DAO->getLanguageNameFromId($question["question_language"]).'
                                        </td>');
 
                                 if ($firstQuestion) {

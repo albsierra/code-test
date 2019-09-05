@@ -32,7 +32,7 @@ $OUTPUT->bodyStart();
     <div class="row">
         <div class="col-sm-6 col-sm-offset-1" id="splashMessage">
 
-            <h1 class="fadeIn">Quick Write</h1>
+            <h1 class="fadeIn">Code Test</h1>
 
             <p class="fadeIn text-justify">
                 Use this tool to add questions to collect feedback from students quickly. Instructors can create any number of questions to which they would like their students to respond.
@@ -55,7 +55,7 @@ $OUTPUT->bodyStart();
     </div>
     <div class="col-sm-5 col-sm-offset-1" id="createFormContainer">
         <form method="post" action="actions/UpdateMainTitle.php" id="createForm" class="fadeInUp">
-            <h3>Create Quick Write</h3>
+            <h3>Create Code Test</h3>
             <div class="form-group">
                 <label for="toolTitle">Title</label>
                 <input type="text" class="form-control" id="toolTitle" name="toolTitle" placeholder="Quick Write" autofocus value="<?php echo($toolTitle); ?>">

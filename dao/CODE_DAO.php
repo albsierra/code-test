@@ -78,17 +78,43 @@ class CODE_DAO {
         return $this->PDOX->rowDie($query, $arr);
     }
 
-    function createQuestion($code_id, $question_text, $current_time) {
+    function createQuestion($code_id, $question_language, $question_text, $question_input, $question_output, $current_time) {
         $nextNumber = $this->getNextQuestionNumber($code_id);
-        $query = "INSERT INTO {$this->p}code_question (code_id, question_num, question_txt, modified) VALUES (:codeId, :questionNum, :questionText, :currentTime);";
-        $arr = array(':codeId' => $code_id, ':questionNum' => $nextNumber, ':questionText' => $question_text, ':currentTime' => $current_time);
+        $query = "
+            INSERT INTO {$this->p}code_question 
+                (code_id, question_num, question_language, question_txt, question_input, question_output, modified) 
+            VALUES
+                (:codeId, :questionNum, :questionLanguage, :questionText, :questionInput, :questionOutput, :currentTime);";
+        $arr = array(
+            ':codeId' => $code_id,
+            ':questionNum' => $nextNumber,
+            ':questionLanguage' => $question_language,
+            ':questionText' => $question_text,
+            ':questionInput' => $question_input,
+            ':questionOutput' => $question_output,
+            ':currentTime' => $current_time
+        );
         $this->PDOX->queryDie($query, $arr);
         return $this->PDOX->lastInsertId();
     }
 
-    function updateQuestion($question_id, $question_text, $current_time) {
-        $query = "UPDATE {$this->p}code_question set question_txt = :questionText, modified = :currentTime WHERE question_id = :questionId;";
-        $arr = array(':questionId' => $question_id, ':questionText' => $question_text, ':currentTime' => $current_time);
+    function updateQuestion($question_id, $question_language, $question_text, $question_input, $question_output, $current_time) {
+        $query = "UPDATE {$this->p}code_question
+            SET
+                question_language = :questionLanguage,
+                question_txt = :questionText,
+                question_input = :questionInput,
+                question_output = :questionOutput,
+                modified = :currentTime
+            WHERE question_id = :questionId;";
+        $arr = array(
+            ':questionId' => $question_id,
+            ':questionLanguage' => $question_language,
+            ':questionText' => $question_text,
+            ':questionInput' => $question_input,
+            ':questionOutput' => $question_output,
+            ':currentTime' => $current_time
+        );
         $this->PDOX->queryDie($query, $arr);
     }
 
@@ -173,5 +199,20 @@ class CODE_DAO {
         $arr = array(':user_id' => $user_id);
         $context = $this->PDOX->rowDie($query, $arr);
         return $context["displayname"];
+    }
+
+    function getLanguageNameFromId($language_id) {
+        switch($language_id) {
+            case 1:
+                $languge_name = "PHP";
+                break;
+            case 2:
+                $languge_name = "JAVA";
+                break;
+            default:
+                $languge_name = "PHP";
+                break;
+        }
+        return $languge_name;
     }
 }

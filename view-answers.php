@@ -53,6 +53,7 @@ $OUTPUT->bodyStart();
             <div class="list-group fadeInFast" id="codeContentContainer">
                 <div class="list-group-item">
                     <h4><?php echo($question["question_txt"]); ?></h4>
+                    <h5><?php echo($CODE_DAO->getLanguageNameFromId($question["question_language"])); ?></h5>
                 </div>
                 <?php
                 foreach ($answers as $answer) {

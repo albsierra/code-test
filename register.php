@@ -1,10 +1,10 @@
 <?php
 
 $REGISTER_LTI2 = array(
-    "name" => "Quick Write", // Name of the tool
+    "name" => "Code Test", // Name of the tool
     "FontAwesome" => "fa-pencil-square", // Icon for the tool
-    "short_name" => "Quick Write",
-    "description" => "A simple tool to prompt users to respond to short answer questions.", // Tool description
+    "short_name" => "Code-test",
+    "description" => "A SQL-Test tool derived from QuickWrite Tsugi tool (https://github.com/tsugitools/quickwrite).", // Tool description
     "messages" => array("launch", "launch_grade"),
     "license" => "Apache",
     "languages" => array(
@@ -13,7 +13,7 @@ $REGISTER_LTI2 = array(
     "analytics" => array(
         "internal"
     ),
-    "source_url" => "https://github.com/udayton/mod-quickwrite",
+    "source_url" => "https://github.com/albsierra/code-test",
     "screen_shots" => array(
         "images/CODE-Splash.jpg",
         "images/CODE-InstructorQuestions.jpg",
