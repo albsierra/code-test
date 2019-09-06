@@ -38,7 +38,7 @@ $moreToSubmit = false;
     <div class="row">
         <div class="col-sm-3 col-sm-offset-1" id="codeInfo">
             <h1><?php echo($toolTitle); ?></h1>
-            <p>Use the form to respond to the question prompts in the list. You can respond to each question all at once or one at a time over multiple sessions. However, once you respond to a question you will not be able to edit or delete your answer.</p>
+            <p>Use the form to respond to the question prompts in the list. You can respond to each question all at once or one at a time over multiple sessions.</p>
         </div>
         <div class="col-sm-7">
             <form method="post" action="actions/Answer_Submit.php">
@@ -69,17 +69,17 @@ $moreToSubmit = false;
                                 <h5><b>Language:</b> '.$CODE_DAO->getLanguageNameFromId($question["question_language"]).'</h5>
                                 <p>');
 
-                            if (!$answer || $answerText == "") {
+//                            if (!$answer || $answerText == "") {
                                 echo('<textarea class="form-control" name="A'.$question["question_num"].'" rows="3" autofocus></textarea>');
                                 $moreToSubmit = true;
-                            } else {
+//                            } else {
                                 $dateTime = new DateTime($answer['modified']);
                                 $formattedDate = $dateTime->format("m-d-y")." at ".$dateTime->format("h:i A");
 
-                                echo($answerText.'
-                                    <div class="text-right text-muted"><span aria-hidden="true" class="fa fa-check text-success"></span> '.$formattedDate.'</div>
-                                    <input type="hidden" name="A'.$question["question_num"].'" value="'.$answerText.'" />');
-                            }
+//                                echo($answerText.'
+                                echo('<div class="text-right text-muted"><span aria-hidden="true" class="fas fa-thumbs-' . ($answer['answer_success'] ? 'up' : 'down') . ' text-success"></span> '.$formattedDate.'</div>');
+//                                    <input type="hidden" name="A'.$question["question_num"].'" value="'.$answerText.'" />');
+//                            }
                             echo ('</p>');
                             echo('<input type="hidden" name="QuestionID'.$question["question_num"].'" value="'.$question_id.'"/>');
                             echo('<input type="hidden" name="AnswerID'.$question["question_num"].'" value="'.$answerId.'"/>');

@@ -162,16 +162,40 @@ class CODE_DAO {
         return $context['modified'];
     }
 
-    function createAnswer($user_id, $question_id, $answer_txt, $current_time) {
-        $query = "INSERT INTO {$this->p}code_answer (user_id, question_id, answer_txt, modified) VALUES (:userId, :questionId, :answerTxt, :currentTime);";
-        $arr = array(':userId' => $user_id,':questionId' => $question_id, ':answerTxt' => $answer_txt, ':currentTime' => $current_time);
+    function createAnswer($user_id, $question_id, $answer_txt, $answer_success, $current_time) {
+        $answer_txt = $this->PDOX->quote($answer_txt);
+        $query = "
+            INSERT INTO {$this->p}code_answer
+            (user_id, question_id, answer_txt, answer_success, modified)
+            VALUES
+            (:userId, :questionId, :answerTxt, :answerSuccess, :currentTime);";
+        $arr = array(
+            ':userId' => $user_id,
+            ':questionId' => $question_id,
+            ':answerTxt' => $answer_txt,
+            ':answerSuccess' => $answer_success,
+            ':currentTime' => $current_time
+        );
         $this->PDOX->queryDie($query, $arr);
         return $this->PDOX->lastInsertId();
     }
 
-    function updateAnswer($answer_id, $answer_txt, $current_time) {
-        $query = "UPDATE {$this->p}code_answer set answer_txt = :answerTxt, modified = :currentTime where answer_id = :answerId;";
-        $arr = array(':answerId' => $answer_id, ':answerTxt' => $answer_txt, ':currentTime' => $current_time);
+    function updateAnswer($answer_id, $answer_txt, $answer_success, $current_time) {
+        $answer_txt = $this->PDOX->quote($answer_txt);
+        $query = "
+            UPDATE {$this->p}code_answer
+            set
+            answer_txt = :answerTxt,
+            answer_success = :answerSuccess,
+            modified = :currentTime
+            where
+            answer_id = :answerId;";
+        $arr = array(
+            ':answerId' => $answer_id,
+            ':answerTxt' => $answer_txt,
+            ':answerSuccess' => $answer_success,
+            ':currentTime' => $current_time
+        );
         $this->PDOX->queryDie($query, $arr);
     }
 
@@ -207,12 +231,79 @@ class CODE_DAO {
                 $languge_name = "PHP";
                 break;
             case 2:
-                $languge_name = "JAVA";
+                $languge_name = "Java";
                 break;
             default:
                 $languge_name = "PHP";
                 break;
         }
         return $languge_name;
+    }
+
+    function gradeAnswer($answerCode, $questionId) {
+        $question = $this->getQuestionById($questionId);
+
+        return $question["question_output"] == $this->getOutputFromCode($answerCode, $question);
+    }
+
+    function getOutputFromCode($answerCode, $question) {
+        $tmpfile = tmpfile();
+        fwrite($tmpfile, $answerCode);
+        $output = $this->launchCode($tmpfile, $question);
+        return($output);
+    }
+
+    function launchCode($file, $question) {
+        $pathFile = stream_get_meta_data($file)['uri'];
+
+        $descriptorspec = array(
+           0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
+           1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
+           2 => array("file", "/tmp/error-output.txt", "a") // stderr is a file to write to
+        );
+        
+        $cwd = sys_get_temp_dir(); // '/tmp';
+        $env = array();
+
+        switch ($this->getLanguageNameFromId($question['question_language'])) {
+            case 'PHP': 
+                $fileExtension = "php";
+                $command = "php -f $pathFile.$fileExtension " . $question['question_input'];
+                break;
+            case 'Java':
+                $fileExtension = "java";
+                $command = "echo \"". $question['question_input'] . "\" | java $pathFile.$fileExtension";
+                break;
+        }
+
+        // Add file extension
+        rename($pathFile, "$pathFile.$fileExtension");
+        
+        // Run shell command
+        $process = proc_open($command , $descriptorspec, $pipes, $cwd, $env);
+        
+        if (is_resource($process)) {
+            // $pipes now looks like this:
+            // 0 => writeable handle connected to child stdin
+            // 1 => readable handle connected to child stdout
+            // Any error output will be appended to /tmp/error-output.txt
+        
+            // fwrite($pipes[0], '<?php print_r($_ENV); ? >');
+            fclose($pipes[0]);
+        
+            $output = stream_get_contents($pipes[1]);
+            fclose($pipes[1]);
+        
+            echo(file_get_contents($descriptorspec[2][1]));
+            unlink($descriptorspec[2][1]);
+
+            // It is important that you close any pipes before calling
+            // proc_close in order to avoid a deadlock
+            $return_value = proc_close($process);
+            // remove code file
+            unlink("$pathFile.$fileExtension");
+        
+        }
+        return $output; 
     }
 }

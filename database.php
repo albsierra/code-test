@@ -50,7 +50,8 @@ $DATABASE_INSTALL = array(
     answer_id    INTEGER NOT NULL AUTO_INCREMENT,
     user_id      INTEGER NOT NULL,
     question_id  INTEGER NOT NULL,
-	answer_txt   TEXT NULL,
+    answer_txt   TEXT NULL,
+    answer_success BOOLEAN NULL,
     modified     datetime NULL,
     
     CONSTRAINT `{$CFG->dbprefix}code_ibfk_2`
