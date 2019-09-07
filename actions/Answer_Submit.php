@@ -18,25 +18,25 @@ $totalScore = 0.0;
 for ($x = 1; $x < ($_POST["Total"]+1); $x++) {
     $answerId = $_POST['AnswerID'.$x];
     $questionId = $_POST['QuestionID'.$x];
-    $answerText = $_POST['A'.$x];
+    $answerText = ltrim(rtrim($_POST['A'.$x]));
 
-    if ($answerText != '') {
+    if (strlen($answerText) > 0) {
         $answerSuccess = $CODE_DAO->gradeAnswer($answerText, $questionId);
-        $totalScore += ($answerSuccess ? 1 : 0) ;
-    }
+        $totalScore += ($answerSuccess ? 1 : 0);
 
 
-    if ($answerId > -1) {
-        // Existing answer check if it needs to be updated
-        $oldAnswer = $CODE_DAO->getAnswerById($answerId);
+        if ($answerId > -1) {
+            // Existing answer check if it needs to be updated
+            $oldAnswer = $CODE_DAO->getAnswerById($answerId);
 
-        if ($answerText !== $oldAnswer['answer_txt']) {
-            // Answer has changed so update
-            $CODE_DAO->updateAnswer($answerId, $answerText, ($answerSuccess ? 1 : 0), $currentTime);
+            if ($answerText !== $oldAnswer['answer_txt']) {
+                // Answer has changed so update
+                $CODE_DAO->updateAnswer($answerId, $answerText, ($answerSuccess ? 1 : 0), $currentTime);
+            }
+        } else {
+            // New answer
+            $CODE_DAO->createAnswer($USER->id, $questionId, $answerText, ($answerSuccess ? 1 : 0), $currentTime);
         }
-    } else if ($answerText != '') {
-        // New answer
-        $CODE_DAO->createAnswer($USER->id, $questionId, $answerText, ($answerSuccess ? 1 : 0), $currentTime);
     }
 }
 

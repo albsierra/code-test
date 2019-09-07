@@ -5,8 +5,9 @@ $(document).ready(function(){
     addModal.on('hidden.bs.modal', function() {
         $("#questionLanguage").val('');
         $("#questionText").val('');
-        $("#questionInput").val('');
-        $("#questionOutput").val('');
+        $("#questionInputTest").val('');
+        $("#questionInputGrade").val('');
+        $("#questionSolution").val('');
     });
     addModal.on('shown.bs.modal', function() {
         $("#questionText").focus();

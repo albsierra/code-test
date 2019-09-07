@@ -16,18 +16,19 @@ if ($USER->instructor) {
     $questionId = $_POST["questionId"];
     $questionLanguage = $_POST["questionLanguage"];
     $questionText = $_POST["questionText"];
-    $questionInput = $_POST["questionInput"];
-    $questionOutput = $_POST["questionOutput"];
+    $questionInputTest = $_POST["questionInputTest"];
+    $questionInputGrade = $_POST["questionInputGrade"];
+    $questionSolution = $_POST["questionSolution"];
 
     $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
     $currentTime = $currentTime->format("Y-m-d H:i:s");
 
 	if ($questionId > -1) {
 	    // Existing question
-	    $CODE_DAO->updateQuestion($questionId, $questionLanguage, $questionText, $questionInput, $questionOutput, $currentTime);
+	    $CODE_DAO->updateQuestion($questionId, $questionLanguage, $questionText, $questionInputTest, $questionInputGrade, $questionSolution, $currentTime);
     } else {
 	    // New question
-        $CODE_DAO->createQuestion($_SESSION["code_id"], $questionLanguage, $questionText, $questionInput, $questionOutput, $currentTime);
+        $CODE_DAO->createQuestion($_SESSION["code_id"], $questionLanguage, $questionText, $questionInputTest, $questionInputGrade, $questionSolution, $currentTime);
     }
 
     header( 'Location: '.addSession('../instructor-home.php') ) ;

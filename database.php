@@ -33,8 +33,9 @@ $DATABASE_INSTALL = array(
     question_num  INTEGER NULL,
     question_language  INTEGER NOT NULL DEFAULT 1,
     question_txt  TEXT NULL,   
-    question_input  VARCHAR(255) NULL,
-    question_output  TEXT NULL,
+    question_input_test  VARCHAR(255) NULL,
+    question_input_grade  VARCHAR(255) NULL,
+    question_solution  TEXT NULL,
     modified      datetime NULL,
     
     CONSTRAINT `{$CFG->dbprefix}code_ibfk_1`

@@ -78,41 +78,44 @@ class CODE_DAO {
         return $this->PDOX->rowDie($query, $arr);
     }
 
-    function createQuestion($code_id, $question_language, $question_text, $question_input, $question_output, $current_time) {
+    function createQuestion($code_id, $question_language, $question_text, $question_input_test, $question_input_grade, $question_solution, $current_time) {
         $nextNumber = $this->getNextQuestionNumber($code_id);
         $query = "
             INSERT INTO {$this->p}code_question 
-                (code_id, question_num, question_language, question_txt, question_input, question_output, modified) 
+                (code_id, question_num, question_language, question_txt, question_input_test, question_input_grade, question_solution, modified) 
             VALUES
-                (:codeId, :questionNum, :questionLanguage, :questionText, :questionInput, :questionOutput, :currentTime);";
+                (:codeId, :questionNum, :questionLanguage, :questionText, :questionInputTest, :questionInputGrade, :questionSolution, :currentTime);";
         $arr = array(
             ':codeId' => $code_id,
             ':questionNum' => $nextNumber,
             ':questionLanguage' => $question_language,
             ':questionText' => $question_text,
-            ':questionInput' => $question_input,
-            ':questionOutput' => $question_output,
+            ':questionInputTest' => $question_input_test,
+            ':questionInputGrade' => $question_input_grade,
+            ':questionSolution' => $question_solution,
             ':currentTime' => $current_time
         );
         $this->PDOX->queryDie($query, $arr);
         return $this->PDOX->lastInsertId();
     }
 
-    function updateQuestion($question_id, $question_language, $question_text, $question_input, $question_output, $current_time) {
+    function updateQuestion($question_id, $question_language, $question_text, $question_input_test, $question_input_grade, $question_solution, $current_time) {
         $query = "UPDATE {$this->p}code_question
             SET
                 question_language = :questionLanguage,
                 question_txt = :questionText,
-                question_input = :questionInput,
-                question_output = :questionOutput,
+                question_input_test = :questionInputTest,
+                question_input_grade = :questionInputGrade,
+                question_solution = :questionSolution,
                 modified = :currentTime
             WHERE question_id = :questionId;";
         $arr = array(
             ':questionId' => $question_id,
             ':questionLanguage' => $question_language,
             ':questionText' => $question_text,
-            ':questionInput' => $question_input,
-            ':questionOutput' => $question_output,
+            ':questionInputTest' => $question_input_test,
+            ':questionInputGrade' => $question_input_grade,
+            ':questionSolution' => $question_solution,
             ':currentTime' => $current_time
         );
         $this->PDOX->queryDie($query, $arr);
@@ -243,17 +246,23 @@ class CODE_DAO {
     function gradeAnswer($answerCode, $questionId) {
         $question = $this->getQuestionById($questionId);
 
-        return $question["question_output"] == $this->getOutputFromCode($answerCode, $question);
+        return $this->getOutputFromCode(
+            $question["question_solution"], $question['question_language'], $question['question_input_grade']
+            )
+                ==
+            $this->getOutputFromCode(
+                $answerCode, $question['question_language'], $question['question_input_grade']
+            );
     }
 
-    function getOutputFromCode($answerCode, $question) {
+    function getOutputFromCode($answerCode, $language, $input) {
         $tmpfile = tmpfile();
         fwrite($tmpfile, $answerCode);
-        $output = $this->launchCode($tmpfile, $question);
-        return($output);
+        $output = $this->launchCode($tmpfile, $language, $input);
+        return(nl2br($output));
     }
 
-    function launchCode($file, $question) {
+    function launchCode($file, $language, $input) {
         $pathFile = stream_get_meta_data($file)['uri'];
 
         $descriptorspec = array(
@@ -265,14 +274,14 @@ class CODE_DAO {
         $cwd = sys_get_temp_dir(); // '/tmp';
         $env = array();
 
-        switch ($this->getLanguageNameFromId($question['question_language'])) {
+        switch ($this->getLanguageNameFromId($language)) {
             case 'PHP': 
                 $fileExtension = "php";
-                $command = "php -f $pathFile.$fileExtension " . $question['question_input'];
+                $command = "php -f $pathFile.$fileExtension " . $input;
                 break;
             case 'Java':
                 $fileExtension = "java";
-                $command = "echo \"". $question['question_input'] . "\" | java $pathFile.$fileExtension";
+                $command = "echo \"". $input . "\" | java $pathFile.$fileExtension";
                 break;
         }
 

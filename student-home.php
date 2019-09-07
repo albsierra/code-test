@@ -69,6 +69,18 @@ $moreToSubmit = false;
                                 <h5><b>Language:</b> '.$CODE_DAO->getLanguageNameFromId($question["question_language"]).'</h5>
                                 <p>');
 
+                                echo('
+                                <h6>Input</h6>
+                                <p>' . $question["question_input_test"] . '</p>
+                            ');
+
+                            echo('
+                                <h6>Output</h6>
+                                <p>' .
+                                $CODE_DAO->getOutputFromCode($question["question_solution"], $question['question_language'], $question['question_input_test'])
+                                . '</p>
+                            ');
+
 //                            if (!$answer || $answerText == "") {
                                 echo('<textarea class="form-control" name="A'.$question["question_num"].'" rows="3" autofocus></textarea>');
                                 $moreToSubmit = true;

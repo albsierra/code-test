@@ -38,7 +38,7 @@ $OUTPUT->bodyStart();
                 Use this tool to add questions to collect feedback from students quickly. Instructors can create any number of questions to which they would like their students to respond.
             </p>
             <p class="fadeIn text-justify">
-                Students will be able to see all of the available questions and respond to each all at once or over several sessions. However, students will not be able to edit an answer to a question once it has been submitted.
+                Students will be able to see all of the available questions and respond to each all at once or over several sessions.
             </p>
 
             <div class="toggle-container fadeIn">
