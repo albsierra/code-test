@@ -70,19 +70,19 @@ $moreToSubmit = false;
                                 <p>');
 
                                 echo('
-                                <h6>Input</h6>
+                                <h6><b>Input</b></h6>
                                 <p>' . $question["question_input_test"] . '</p>
                             ');
 
                             echo('
-                                <h6>Output</h6>
+                                <h6><b>Output</b></h6>
                                 <p>' .
                                 $CODE_DAO->getOutputFromCode($question["question_solution"], $question['question_language'], $question['question_input_test'])
                                 . '</p>
                             ');
 
 //                            if (!$answer || $answerText == "") {
-                                echo('<textarea class="form-control" name="A'.$question["question_num"].'" rows="3" autofocus></textarea>');
+                                echo('<textarea class="form-control" name="A'.$question["question_num"].'" rows="10" autofocus></textarea>');
                                 $moreToSubmit = true;
 //                            } else {
                                 $dateTime = new DateTime($answer['modified']);

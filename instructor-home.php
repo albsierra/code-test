@@ -74,13 +74,18 @@ $totalQuestions = count($questions);
                                 <p>
                                     <input type="hidden" name="questionId" value="'.$question["question_id"].'">
                                     <select name="questionLanguage" id="questionLanguage">
-                                        <option value="1" selected="' . ($question["question_language"] == 1 ? "selected" : "") . '">PHP</option>
-                                        <option value="2" selected="' . ($question["question_language"] == 2 ? "selected" : "") . '">Java</option>
+                                        <option value="1" ' . ($question["question_language"] == 1 ? "selected" : "") . '>PHP</option>
+                                        <option value="2" ' . ($question["question_language"] == 2 ? "selected" : "") . '>Java</option>
                                     </select>
-                                    <textarea class="form-control" name="questionText" rows="4" required>'.$question["question_txt"].'</textarea>
-                                    <input type="text" name="questionInputTest" id="questionInputTest" value="'.$question["question_input_test"].'">
-                                    <input type="text" name="questionInputGrade" id="questionInputGrade" value="'.$question["question_input_grade"].'">
-                                    <textarea class="form-control" name="questionSolution" id="questionSolution" rows="4" required>'.$question["question_solution"].'</textarea>
+                                    <br />
+                                    <label for="questionText">Question Text</label>
+                                    <textarea class="form-control" name="questionText" rows="10" required>'.$question["question_txt"].'</textarea>
+                                    <label for="questionInputTest">Input for student</label>
+                                    <textarea class="form-control" name="questionInputTest" id="questionInputTest" rows="4" required>'.$question["question_input_test"].'</textarea>
+                                    <label for="questionInputGrade">Input for grade</label>
+                                    <textarea class="form-control" name="questionInputGrade" id="questionInputGrade" rows="4" required>'.$question["question_input_grade"].'</textarea>
+                                    <label for="questionSolution">Code Solution</label>
+                                    <textarea class="form-control" name="questionSolution" id="questionSolution" rows="10" required>'.$question["question_solution"].'</textarea>
                                 </p>
                                 <div class="text-right">
                                     <input type="submit" class="btn btn-success" value="Save" form="questionTextForm'.$question["question_id"].'">
@@ -129,10 +134,10 @@ $totalQuestions = count($questions);
                         <textarea class="form-control" name="questionText" id="questionText" rows="4" required></textarea>
 
                         <label for="questionInputTest">Input for student</label>
-                        <input type="text" class="form-control" name="questionInputTest" id="questionInputTest" value="" required>
+                        <textarea class="form-control" name="questionInputTest" id="questionInputTest" rows="4" required></textarea>
 
                         <label for="questionInputGrade">Input for grade</label>
-                        <input type="text" class="form-control" name="questionInputGrade" id="questionInputGrade" value="" required>
+                        <textarea class="form-control" name="questionInputGrade" id="questionInputGrade" rows="4" required></textarea>
 
                         <label for="questionSolution">Code Solution</label>
                         <textarea class="form-control" name="questionSolution" id="questionSolution" rows="4" required></textarea>
