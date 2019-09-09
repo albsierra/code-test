@@ -229,12 +229,15 @@ class CODE_DAO {
     }
 
     function getLanguageNameFromId($language_id) {
-        switch($language_id) {
+        switch ($language_id) {
             case 1:
                 $languge_name = "PHP";
                 break;
             case 2:
                 $languge_name = "Java";
+                break;
+            case 3:
+                $languge_name = "Javascript";
                 break;
             default:
                 $languge_name = "PHP";
@@ -275,13 +278,17 @@ class CODE_DAO {
         $env = array();
 
         switch ($this->getLanguageNameFromId($language)) {
-            case 'PHP': 
+            case 'PHP':
                 $fileExtension = "php";
                 $command = "php -f $pathFile.$fileExtension " . $input;
                 break;
             case 'Java':
                 $fileExtension = "java";
-                $command = "echo \"". $input . "\" | java $pathFile.$fileExtension";
+                $command = "echo \"" . $input . "\" | java $pathFile.$fileExtension";
+                break;
+            case 'Javascript':
+                $fileExtension = "js";
+                $command = "node $pathFile.$fileExtension " . $input;
                 break;
         }
 

@@ -76,6 +76,7 @@ $totalQuestions = count($questions);
                                     <select name="questionLanguage" id="questionLanguage">
                                         <option value="1" ' . ($question["question_language"] == 1 ? "selected" : "") . '>PHP</option>
                                         <option value="2" ' . ($question["question_language"] == 2 ? "selected" : "") . '>Java</option>
+                                        <option value="3" ' . ($question["question_language"] == 3 ? "selected" : "") . '>Javascript</option>
                                     </select>
                                     <br />
                                     <label for="questionText">Question Text</label>
@@ -127,6 +128,7 @@ $totalQuestions = count($questions);
                                     <select name="questionLanguage" id="questionLanguage">
                                         <option value="1" >PHP</option>
                                         <option value="2" >Java</option>
+                                        <option value="3" >Javascript</option>
                                     </select>
                         <br />
 
