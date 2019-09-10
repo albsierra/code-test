@@ -24,7 +24,6 @@ for ($x = 1; $x < ($_POST["Total"]+1); $x++) {
         $answerSuccess = $CODE_DAO->gradeAnswer($answerText, $questionId);
         $totalScore += ($answerSuccess ? 1 : 0);
 
-
         if ($answerId > -1) {
             // Existing answer check if it needs to be updated
             $oldAnswer = $CODE_DAO->getAnswerById($answerId);
@@ -37,6 +36,9 @@ for ($x = 1; $x < ($_POST["Total"]+1); $x++) {
             // New answer
             $CODE_DAO->createAnswer($USER->id, $questionId, $answerText, ($answerSuccess ? 1 : 0), $currentTime);
         }
+    } elseif($answerId > -1) {
+        $oldAnswer = $CODE_DAO->getAnswerById($answerId);
+        $totalScore += ($oldAnswer['answer_success'] ? 1 : 0) ;
     }
 }
 
