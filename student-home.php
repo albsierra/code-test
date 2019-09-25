@@ -65,7 +65,7 @@ $moreToSubmit = false;
                             }
 
                             echo('<div class="list-group-item">
-                                <h4>'.$question["question_txt"].'</h4>
+                                <div>'.$question["question_txt"].'</div>
                                 <h5><b>Language:</b> '.$CODE_DAO->getLanguageNameFromId($question["question_language"]).'</h5>
                                 <p>');
 
