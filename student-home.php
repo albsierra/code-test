@@ -77,7 +77,7 @@ $moreToSubmit = false;
                             echo('
                                 <h6><b>Output</b></h6>
                                 <p>' .
-                                htmlentities($CODE_DAO->getOutputFromCode($question["question_solution"], $question['question_language'], $question['question_input_test']))
+                                nl2br(htmlentities($CODE_DAO->getOutputFromCode($question["question_solution"], $question['question_language'], $question['question_input_test'])))
                                 . '</p>
                             ');
 

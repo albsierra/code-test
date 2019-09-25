@@ -262,7 +262,7 @@ class CODE_DAO {
         $tmpfile = tmpfile();
         fwrite($tmpfile, $answerCode);
         $output = $this->launchCode($tmpfile, $language, $input);
-        return(nl2br($output));
+        return($output);
     }
 
     function launchCode($file, $language, $input) {
