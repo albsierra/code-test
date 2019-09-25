@@ -66,7 +66,7 @@ $totalQuestions = count($questions);
                         $totalAnswers = $CODE_DAO->countAnswersForQuestion($question["question_id"]);
                         echo('
                         <div class="list-group-item">
-                            <h4 id="questionText'.$question["question_id"].'">'.$question["question_txt"].'</h4>
+                            <div id="questionText'.$question["question_id"].'">'.$question["question_txt"].'</div>
                             <h5 id="questionLanguage'.$question["question_id"].'"><b>Language:</b> '.
                                 $CODE_DAO->getLanguageNameFromId($question["question_language"]) 
                             . '</h5>
@@ -80,7 +80,7 @@ $totalQuestions = count($questions);
                                     </select>
                                     <br />
                                     <label for="questionText">Question Text</label>
-                                    <textarea class="form-control" name="questionText" rows="10" required>'.$question["question_txt"].'</textarea>
+                                    <textarea class="form-control" id="questionText" name="questionText" rows="10" required>'.$question["question_txt"].'</textarea>
                                     <label for="questionInputTest">Input for student</label>
                                     <textarea class="form-control" name="questionInputTest" id="questionInputTest" rows="4" required>'.$question["question_input_test"].'</textarea>
                                     <label for="questionInputGrade">Input for grade</label>
