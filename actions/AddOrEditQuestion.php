@@ -18,7 +18,7 @@ if ($USER->instructor) {
     $questionText = $_POST["questionText"];
     $questionInputTest = $_POST["questionInputTest"];
     $questionInputGrade = $_POST["questionInputGrade"];
-    $questionSolution = $_POST["questionSolution"];
+    $questionSolution = trim($_POST["questionSolution"]);
 
     $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
     $currentTime = $currentTime->format("Y-m-d H:i:s");
