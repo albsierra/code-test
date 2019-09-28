@@ -267,6 +267,23 @@ class CODE_DAO {
 
     function launchCode($file, $language, $input) {
         $pathFile = stream_get_meta_data($file)['uri'];
+        
+        $languageName = $this->getLanguageNameFromId($language);
+        switch ($languageName) {
+            case 'PHP':
+                $fileExtension = "php";
+                break;
+            case 'Java':
+                $fileExtension = "java";
+                break;
+            case 'Javascript':
+                $fileExtension = "js";
+                break;
+        }
+
+        // Add file extension
+        rename($pathFile, "$pathFile.$fileExtension");
+        
 
         $descriptorspec = array(
            0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
@@ -277,49 +294,49 @@ class CODE_DAO {
         $cwd = sys_get_temp_dir(); // '/tmp';
         $env = array();
 
-        switch ($this->getLanguageNameFromId($language)) {
-            case 'PHP':
-                $fileExtension = "php";
-                $command = "php -f $pathFile.$fileExtension " . $input;
-                break;
-            case 'Java':
-                $fileExtension = "java";
-                $command = "echo \"" . $input . "\" | java $pathFile.$fileExtension";
-                break;
-            case 'Javascript':
-                $fileExtension = "js";
-                $command = "node $pathFile.$fileExtension " . $input;
-                break;
-        }
+        $output = "";
 
-        // Add file extension
-        rename($pathFile, "$pathFile.$fileExtension");
-        
-        // Run shell command
-        $process = proc_open($command , $descriptorspec, $pipes, $cwd, $env);
-        
-        if (is_resource($process)) {
-            // $pipes now looks like this:
-            // 0 => writeable handle connected to child stdin
-            // 1 => readable handle connected to child stdout
-            // Any error output will be appended to /tmp/error-output.txt
-        
-            // fwrite($pipes[0], '<?php print_r($_ENV); ? >');
-            fclose($pipes[0]);
-        
-            $output = stream_get_contents($pipes[1]);
-            fclose($pipes[1]);
-        
-            echo(file_get_contents($descriptorspec[2][1]));
-            unlink($descriptorspec[2][1]);
+        $inputs = explode(PHP_EOL, trim($input));
 
-            // It is important that you close any pipes before calling
-            // proc_close in order to avoid a deadlock
-            $return_value = proc_close($process);
-            // remove code file
-            unlink("$pathFile.$fileExtension");
-        
+        foreach ($inputs as $inputLine) {
+
+            switch ($languageName) {
+                case 'PHP':
+                    $command = "php -f $pathFile.$fileExtension " . $inputLine;
+                    break;
+                case 'Java':
+                    $command = "echo \"" . $inputLine . "\" | java $pathFile.$fileExtension";
+                    break;
+                case 'Javascript':
+                    $command = "node $pathFile.$fileExtension " . $inputLine;
+                    break;
+            }
+
+            // Run shell command
+            $process = proc_open($command, $descriptorspec, $pipes, $cwd, $env);
+
+            if (is_resource($process)) {
+                // $pipes now looks like this:
+                // 0 => writeable handle connected to child stdin
+                // 1 => readable handle connected to child stdout
+                // Any error output will be appended to /tmp/error-output.txt
+
+                // fwrite($pipes[0], '<?php print_r($_ENV); ? >');
+                fclose($pipes[0]);
+
+                $output .= stream_get_contents($pipes[1]);
+                fclose($pipes[1]);
+
+                echo (file_get_contents($descriptorspec[2][1]));
+                unlink($descriptorspec[2][1]);
+
+                // It is important that you close any pipes before calling
+                // proc_close in order to avoid a deadlock
+                $return_value = proc_close($process);
+            }
         }
+        // remove code file
+        unlink("$pathFile.$fileExtension");
         return $output; 
     }
 }
