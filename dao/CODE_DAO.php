@@ -324,7 +324,7 @@ class CODE_DAO {
                 // fwrite($pipes[0], '<?php print_r($_ENV); ? >');
                 fclose($pipes[0]);
 
-                $output .= stream_get_contents($pipes[1]);
+                $output .= trim(stream_get_contents($pipes[1])) . "\n";
                 fclose($pipes[1]);
 
                 echo (file_get_contents($descriptorspec[2][1]));

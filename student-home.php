@@ -73,8 +73,7 @@ $moreToSubmit = false;
                                 <h6><b>Input</b></h6>
                                 <pre>' .
                                 nl2br(htmlentities($question["question_input_test"]))
-                                . '</pre>                                
-                                <p>' . $question["question_input_test"] . '</p>
+                                . '</pre>
                             ');
 
                             echo('
