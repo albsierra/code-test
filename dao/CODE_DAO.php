@@ -166,7 +166,7 @@ class CODE_DAO {
     }
 
     function createAnswer($user_id, $question_id, $answer_txt, $answer_success, $current_time) {
-        $answer_txt = $this->PDOX->quote($answer_txt);
+        // $answer_txt = $this->PDOX->quote($answer_txt);
         $query = "
             INSERT INTO {$this->p}code_answer
             (user_id, question_id, answer_txt, answer_success, modified)
@@ -184,7 +184,7 @@ class CODE_DAO {
     }
 
     function updateAnswer($answer_id, $answer_txt, $answer_success, $current_time) {
-        $answer_txt = $this->PDOX->quote($answer_txt);
+        // $answer_txt = $this->PDOX->quote($answer_txt);
         $query = "
             UPDATE {$this->p}code_answer
             set

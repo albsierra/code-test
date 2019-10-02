@@ -74,9 +74,7 @@ $OUTPUT->bodyStart();
                                 </p>
                             </div>
                             <div class="col-sm-10">
-                                <p>
-                                    <?php echo($answer["answer_txt"]); ?>
-                                </p>
+                                <pre><?php echo(htmlspecialchars($answer["answer_txt"])); ?></pre>
                             </div>
                         </div>
                         </div>

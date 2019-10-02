@@ -18,7 +18,7 @@ $totalScore = 0.0;
 for ($x = 1; $x < ($_POST["Total"]+1); $x++) {
     $answerId = $_POST['AnswerID'.$x];
     $questionId = $_POST['QuestionID'.$x];
-    $answerText = ltrim(rtrim($_POST['A'.$x]));
+    $answerText = trim($_POST['A'.$x]);
 
     if (strlen($answerText) > 0) {
         $answerSuccess = $CODE_DAO->gradeAnswer($answerText, $questionId);
