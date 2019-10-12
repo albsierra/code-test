@@ -78,20 +78,22 @@ class CODE_DAO {
         return $this->PDOX->rowDie($query, $arr);
     }
 
-    function createQuestion($code_id, $question_language, $question_text, $question_input_test, $question_input_grade, $question_solution, $current_time) {
+    function createQuestion($code_id, $question_language, $question_text, $question_input_test, $question_output_test, $question_input_grade, $question_output_grade, $question_solution, $current_time) {
         $nextNumber = $this->getNextQuestionNumber($code_id);
         $query = "
             INSERT INTO {$this->p}code_question 
-                (code_id, question_num, question_language, question_txt, question_input_test, question_input_grade, question_solution, modified) 
+                (code_id, question_num, question_language, question_txt, question_input_test, question_output_test, question_input_grade, question_output_grade, question_solution, modified) 
             VALUES
-                (:codeId, :questionNum, :questionLanguage, :questionText, :questionInputTest, :questionInputGrade, :questionSolution, :currentTime);";
+                (:codeId, :questionNum, :questionLanguage, :questionText, :questionInputTest, :questionOutputTest, :questionInputGrade, :questionOutputGrade, :questionSolution, :currentTime);";
         $arr = array(
             ':codeId' => $code_id,
             ':questionNum' => $nextNumber,
             ':questionLanguage' => $question_language,
             ':questionText' => $question_text,
             ':questionInputTest' => $question_input_test,
+            ':questionOutputTest' => $question_output_test,
             ':questionInputGrade' => $question_input_grade,
+            ':questionOutputGrade' => $question_output_grade,
             ':questionSolution' => $question_solution,
             ':currentTime' => $current_time
         );
@@ -99,13 +101,15 @@ class CODE_DAO {
         return $this->PDOX->lastInsertId();
     }
 
-    function updateQuestion($question_id, $question_language, $question_text, $question_input_test, $question_input_grade, $question_solution, $current_time) {
+    function updateQuestion($question_id, $question_language, $question_text, $question_input_test, $question_output_test, $question_input_grade, $question_output_grade, $question_solution, $current_time) {
         $query = "UPDATE {$this->p}code_question
             SET
                 question_language = :questionLanguage,
                 question_txt = :questionText,
                 question_input_test = :questionInputTest,
+                question_output_test = :questionOutputTest,
                 question_input_grade = :questionInputGrade,
+                question_output_grade = :questionOutputGrade,
                 question_solution = :questionSolution,
                 modified = :currentTime
             WHERE question_id = :questionId;";
@@ -114,7 +118,9 @@ class CODE_DAO {
             ':questionLanguage' => $question_language,
             ':questionText' => $question_text,
             ':questionInputTest' => $question_input_test,
+            ':questionOutputTest' => $question_output_test,
             ':questionInputGrade' => $question_input_grade,
+            ':questionOutputGrade' => $question_output_grade,
             ':questionSolution' => $question_solution,
             ':currentTime' => $current_time
         );
@@ -249,13 +255,20 @@ class CODE_DAO {
     function gradeAnswer($answerCode, $questionId) {
         $question = $this->getQuestionById($questionId);
 
-        return $this->getOutputFromCode(
-            $question["question_solution"], $question['question_language'], $question['question_input_grade']
-            )
-                ==
+        return $this->getOutputFrom($question, 'grade') ==
             $this->getOutputFromCode(
                 $answerCode, $question['question_language'], $question['question_input_grade']
             );
+    }
+
+    function getOutputFrom($question, $from) {
+        $indexFrom = "question_input_" . $from;
+        if(strlen($question[$indexFrom]) > 0) {
+            $output = $question[$indexFrom];
+        } else {
+            $output = $this->getOutputFromCode($question["question_solution"], $question['question_language'], $question[$indexFrom]);
+        }
+        return $output;
     }
 
     function getOutputFromCode($answerCode, $language, $input) {

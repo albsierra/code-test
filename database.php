@@ -35,6 +35,8 @@ $DATABASE_INSTALL = array(
     question_txt  TEXT NULL,   
     question_input_test  VARCHAR(255) NULL,
     question_input_grade  VARCHAR(255) NULL,
+    question_output_test  TEXT NULL,
+    question_output_grade  TEXT NULL,
     question_solution  TEXT NULL,
     modified      datetime NULL,
     
