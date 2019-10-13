@@ -30,7 +30,7 @@ if ($USER->instructor) {
         "question_output_grade" => "",
         "question_solution" => $questionSolution
     );
-    
+
     $questionOutputTest = $CODE_DAO->getOutputFrom($question, 'test');
     $questionOutputGrade = $CODE_DAO->getOutputFrom($question, 'grade');;
 

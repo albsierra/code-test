@@ -263,8 +263,9 @@ class CODE_DAO {
 
     function getOutputFrom($question, $from) {
         $indexFrom = "question_input_" . $from;
-        if(strlen($question[$indexFrom]) > 0) {
-            $output = $question[$indexFrom];
+        $indexTo =  "question_output_" . $from;
+        if(strlen($question[$indexTo]) > 0) {
+            $output = $question[$indexTo];
         } else {
             $output = $this->getOutputFromCode($question["question_solution"], $question['question_language'], $question[$indexFrom]);
         }
