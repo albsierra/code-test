@@ -255,10 +255,23 @@ class CODE_DAO {
     function gradeAnswer($answerCode, $questionId) {
         $question = $this->getQuestionById($questionId);
 
-        return $this->getOutputFrom($question, 'grade') ==
-            $this->getOutputFromCode(
+        $outputSolution = $this->getOutputFrom($question, 'grade');
+        $outputAnswer =  $this->getOutputFromCode(
                 $answerCode, $question['question_language'], $question['question_input_grade']
             );
+
+        if($logGrade = false) {
+            $fileLog = "/var/www/vhosts/iesdosmares.com/logs/code.iesdosmares.com/respuestas.log";
+            $displayedName = (is_object($USER) && isset($USER->id)) ? $this->findDisplayName($USER->id) : "";
+            error_log("******************" . $displayedName . "******************************************", 3, $fileLog);
+            error_log(addslashes($outputSolution), 3, $fileLog);
+            error_log("--------", 3, $fileLog);
+            error_log(addslashes($outputAnswer), 3, $fileLog);
+            error_log("============ Grade: " . $outputSolution == $outputAnswer . "=============================", 3, $fileLog);
+        }
+        
+        return $outputSolution == $outputAnswer;
+
     }
 
     function getOutputFrom($question, $from) {
@@ -319,7 +332,7 @@ class CODE_DAO {
                     $command = "php -f $pathFile.$fileExtension " . $inputLine;
                     break;
                 case 'Java':
-                    $command = "echo \"" . $inputLine . "\" | java $pathFile.$fileExtension";
+                    $command = "echo \"" . $inputLine . "\" | java -Duser.language=es -Duser.region=ES $pathFile.$fileExtension";
                     break;
                 case 'Javascript':
                     $command = "node $pathFile.$fileExtension " . $inputLine;
