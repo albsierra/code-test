@@ -329,13 +329,13 @@ class CODE_DAO {
 
             switch ($languageName) {
                 case 'PHP':
-                    $command = "php -f $pathFile.$fileExtension " . $inputLine;
+                    $command = "php -f $pathFile.$fileExtension";
                     break;
                 case 'Java':
-                    $command = "echo \"" . $inputLine . "\" | java -Duser.language=es -Duser.region=ES $pathFile.$fileExtension";
+                    $command = "java -Duser.language=es -Duser.region=ES $pathFile.$fileExtension";
                     break;
                 case 'Javascript':
-                    $command = "node $pathFile.$fileExtension " . $inputLine;
+                    $command = "node $pathFile.$fileExtension";
                     break;
             }
 
@@ -348,14 +348,11 @@ class CODE_DAO {
                 // 1 => readable handle connected to child stdout
                 // Any error output will be appended to /tmp/error-output.txt
 
-                // fwrite($pipes[0], '<?php print_r($_ENV); ? >');
+                fwrite($pipes[0], $inputLine);
                 fclose($pipes[0]);
 
                 $output .= trim(stream_get_contents($pipes[1])) . "\n";
                 fclose($pipes[1]);
-
-                echo (file_get_contents($descriptorspec[2][1]));
-                unlink($descriptorspec[2][1]);
 
                 // It is important that you close any pipes before calling
                 // proc_close in order to avoid a deadlock
