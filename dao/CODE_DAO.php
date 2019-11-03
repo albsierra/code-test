@@ -209,7 +209,7 @@ class CODE_DAO {
     }
 
     function getAllAnswersToQuestion($question_id) {
-        $query = "SELECT * FROM {$this->p}code_answer WHERE question_id = :questionId;";
+        $query = "SELECT * FROM {$this->p}code_answer WHERE question_id = :questionId ORDER BY modified;";
         $arr = array(':questionId' => $question_id);
         return $this->PDOX->allRowsDie($query, $arr);
     }
