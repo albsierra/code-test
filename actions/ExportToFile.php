@@ -39,8 +39,9 @@ if ( $USER->instructor ) {
 
     $letters = range('C','Z');
     for($x = 1; $x<=$questionTotal; $x++){
-        $col1 = $x+2;
-        $exportFile->getActiveSheet()->setCellValueByColumnAndRow($col1, $rowCounter, "Question ".$x);
+        $col1 = ($x-1) * 2 + 3;
+        $exportFile->getActiveSheet()->setCellValueByColumnAndRow($col1, $rowCounter, "Answer ".$x);
+        $exportFile->getActiveSheet()->setCellValueByColumnAndRow($col1 + 1, $rowCounter, "Result ".$x);
 
         $cell_name = $letters[$x]."1";
         $exportFile->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
@@ -77,14 +78,19 @@ if ( $USER->instructor ) {
         foreach ($questions as $question ) {
             $QID = $question["question_id"];
             $A="";
+            $B="";
 
             $answer = $CODE_DAO->getStudentAnswerForQuestion($QID, $UserID);
             if ($answer) {
                 $A = $answer["answer_txt"];
                 $A = str_replace("&#39;", "'", $A);
+                $B = $answer["answer_success"];
+                $B = str_replace("&#39;", "'", $B);
             }
 
             $exportFile->getActiveSheet()->setCellValueByColumnAndRow($col, $rowCounter, $A);
+            $col++;
+            $exportFile->getActiveSheet()->setCellValueByColumnAndRow($col, $rowCounter, $B);
             $col++;
         }
     }
