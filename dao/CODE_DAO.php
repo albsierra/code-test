@@ -323,9 +323,11 @@ class CODE_DAO {
 
         $output = "";
 
-        $inputs = explode(PHP_EOL, trim($input));
+        // Descomentando las siguientes líneas se pueden permitir diferentes casos de prueba
+        // separándolos por un EOL
+        // $inputs = explode(PHP_EOL, trim($input));
 
-        foreach ($inputs as $inputLine) {
+        //foreach ($inputs as $inputLine) {
 
             switch ($languageName) {
                 case 'PHP':
@@ -348,7 +350,7 @@ class CODE_DAO {
                 // 1 => readable handle connected to child stdout
                 // Any error output will be appended to /tmp/error-output.txt
 
-                fwrite($pipes[0], $inputLine);
+                fwrite($pipes[0], $input); //fwrite($pipes[0], $inputLine); //para varios casos de prueba
                 fclose($pipes[0]);
 
                 $output .= trim(stream_get_contents($pipes[1])) . "\n";
@@ -358,7 +360,7 @@ class CODE_DAO {
                 // proc_close in order to avoid a deadlock
                 $return_value = proc_close($process);
             }
-        }
+        //} // cierra el foreach que permite varios casos de prueba
         // remove code file
         unlink("$pathFile.$fileExtension");
         return $output; 
