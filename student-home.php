@@ -72,14 +72,14 @@ $moreToSubmit = false;
                                 echo('
                                 <h6><b>Input</b></h6>
                                 <pre>' .
-                                nl2br(htmlentities($question["question_input_test"]))
+                                htmlentities($question["question_input_test"])
                                 . '</pre>
                             ');
 
                             echo('
                                 <h6><b>Output</b></h6>
                                 <pre>' .
-                                nl2br(htmlentities($CODE_DAO->getOutputFrom($question, 'test')))
+                                htmlentities($CODE_DAO->getOutputFrom($question, 'test'))
                                 . '</pre>
                             ');
 
